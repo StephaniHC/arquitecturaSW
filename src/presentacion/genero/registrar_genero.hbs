@@ -1,0 +1,157 @@
+<div class="card mx-auto bg-dark mb-3 text-light">
+    <div class="card-header">
+        Gestionar Genero
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="card-title">Registrar Genero</h5>
+                <form id="formulario-registrar-genero">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Nro</span>
+                        </div>
+                        <input type="number" class="form-control" required minlength="4" id="nro"
+                            placeholder="001" aria-label="Sizing example input" 
+                            aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+                        </div>
+                        <input type="text" id="nombre" class="form-control" required minlength="4" name="nombre"
+                            placeholder="Accion y Comedia" aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-default">
+                    </div> 
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#exampleModal2" onclick="registrarGenero()">
+                        Registrar
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <h5 class="card-title">Lista de Generos</h5>
+                <table class="table table-striped table-dark table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nro</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each lista_generos}}
+                        <tr>
+                            <th>{{nro}}</th>
+                            <th>{{nombre}}</th> 
+                            <td> 
+                                <a href="/registrar_genero/{{nro}}" type="button"
+                                    class="btn btn-outline-primary btn-sm"><small>Modificar</small>
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                                    data-target="#exampleModal" onclick="eliminarGenero({{nro}})"><span
+                                        class="material-icons">
+                                        Eliminar
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- ELIMINAR -->
+            <div class="modal fade transform-8" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="recipient-name">Esta seguro de eliminar el Genero? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()"
+                                data-dismiss="modal">Eliminar
+                                Genero</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- REGISTRAR -->
+            <div class="modal fade transform-8" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="recipient-name">Esta seguro de registrar el Genero? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning" onclick="confirmarRegistrarGenero()"
+                                ondblclick="confirmarRegistrarGenero()" data-dismiss="modal">Registrar
+                                Genero</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var data = {
+        nro: undefined,
+        nombre: undefined,
+    };
+
+    function registrarGenero() {
+        data.nro = document.getElementById("nro").value; 
+        data.nombre = document.getElementById("nombre").value; 
+        console.log(data.nro, data.nombre);
+    }
+
+    function confirmarRegistrarGenero() {
+        if (data.nro && data.nombre) {
+            let { nro, nombre } = data;
+            axios.post('/registrar_genero', { 
+                nro,
+                nombre,
+            }).then(function (response) {
+                window.location.reload();
+            }).catch(function (error) {
+                alert("Hubo un error al registrar el Genero");
+            });
+        } else {
+            alert("Datos obtenidos no correctos")
+        }
+    }
+
+    function eliminarGenero(nro) {
+        data.nro = nro;
+        console.log("confirmar", nro);
+    }
+
+    function confirmarEliminacion() {
+        if (data.nro === undefined || data.nro === 0) {
+            alert("no puedo eliminar este nro");
+        } else {
+            axios.delete('/registrar_genero/eliminar/' + data.nro).then(function (response) {
+                window.location.reload();
+            }).catch(function (error) {
+                alert("Hubo un error al eliminar el genero");
+            });
+        }
+    }
+</script>

@@ -1,0 +1,60 @@
+<div class="card mx-auto col-lg-6 bg-dark mb-3 text-light">
+    <div class="card-header">
+        Modificar Pelicula # {{codigo}}
+    </div>
+    <form action="/registrar_pelicula/modificar/{{codigo}}?_method=PUT" method="post">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Titulo de la Pelicula</span>
+                </div>
+                <input type="text" class="form-control" required minlength="4" name="titulo"
+                    placeholder="Lo que el agua se llevó" aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default" value="{{titulo}}">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Duracion de la Pelicula</span>
+                </div>
+                <input type="text" class="form-control" required minlength="1" name="duracion"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+                    placeholder="2 hrs" value="{{duracion}}">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Año de la Pelicula</span>
+                </div>
+                <input type="number" class="form-control" required minlength="1" name="anio"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+                    placeholder="2014" value="{{anio}}">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Genero: {{nro_genero}}</span>
+                </div>
+                <select class="form-select form-select-lg" value="{{nro_genero}}" size="3"
+                    aria-label="size 3 select example" name="nro_genero">
+                    <option value="0">Selecciona un Genero</option>
+                    {{#each lista_generos}}
+                    <option id="{{nro}}" value="{{nro}}">{{nombre}} {{nro_genero}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-outline-success">Guardar Cambios</button>
+                </div>
+                <div class="col-md-6">
+                    <a href="/registrar_pelicula" type="button" class="btn btn-outline-danger">Cancelar Cambios</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    document.getElementById("{{nro_genero}}").setAttribute('selected', '');
+</script>

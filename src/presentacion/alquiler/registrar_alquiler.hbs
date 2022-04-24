@@ -1,0 +1,175 @@
+<div class="card mx-auto bg-dark mb-3 text-light">
+    <div class="card-header">
+        Gestionar Nota de Alquiler
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="card-title">Registrar Nota de Alquiler</h5>
+                <form id="formulario-registrar-alquiler">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Nro</span>
+                        </div>
+                        <input type="number" class="form-control" required minlength="4" id="nro"
+                            placeholder="001" aria-label="Sizing example input" 
+                            aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Fecha</span>
+                        </div>
+                        <input type="text" id="fecha" class="form-control" required minlength="4" name="fecha"
+                            placeholder="2020/08/02" aria-label="Sizing example input"
+                            aria-describedby="inputGroup-sizing-default">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Monto</span>
+                        </div>
+                        <input type="number" class="form-control" required minlength="4" id="monto"
+                            placeholder="20 bs" aria-label="Sizing example input" 
+                            aria-describedby="inputGroup-sizing-default">
+                    </div> 
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                        data-target="#exampleModal2" onclick="registrarNota()">
+                        Registrar
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <h5 class="card-title">Lista de Nota de Alquiler</h5>
+                <table class="table table-striped table-dark table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Nro</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each lista_alquiler}}
+                        <tr>
+                            <th>{{nro}}</th>
+                            <th>{{fecha}}</th>
+                            <th>{{monto}}</th> 
+                            <td> 
+                                <a href="/registrar_alquiler/detalle/{{nro}}" type="button"
+                                    class="btn btn-outline-warning btn-sm btn-xs"><small><span class="material-icons">
+                                            Detalle
+                                        </span></small>
+                                </a>
+                                <a href="/registrar_alquiler/{{nro}}" type="button"
+                                    class="btn btn-outline-primary btn-sm"><small>Modificar</small>
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm" data-toggle="modal"
+                                    data-target="#exampleModal" onclick="eliminarAlquiler({{nro}})"><span
+                                        class="material-icons">
+                                        Eliminar
+                                    </span>
+                                </button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            <!-- ELIMINAR -->
+            <div class="modal fade transform-8" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="recipient-name">Esta seguro de eliminar la nota? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()"
+                                data-dismiss="modal">Eliminar
+                                Nota</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- REGISTRAR -->
+            <div class="modal fade transform-8" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="recipient-name">Esta seguro de registrar la nota? </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-warning" onclick="confirmarRegistrarNota()"
+                                ondblclick="confirmarRegistrarNota()" data-dismiss="modal">Registrar
+                                Alquiler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var data = {
+        nro: undefined,
+        fecha: undefined,
+        monto: undefined,
+    };
+
+    function registrarNota() {
+        data.nro = document.getElementById("nro").value; 
+        data.fecha = document.getElementById("fecha").value; 
+        data.monto = document.getElementById("monto").value; 
+        console.log(data.nro, data.fecha, data.monto);
+    }
+
+    function confirmarRegistrarNota() {
+        if (data.nro && data.fecha && data.monto) {
+            let { nro, fecha, monto } = data;
+            axios.post('/registrar_alquiler', { 
+                nro,
+                fecha,
+                monto,
+            }).then(function (response) {
+                window.location.reload();
+            }).catch(function (error) {
+                alert("Hubo un error al registrar la nota");
+            });
+        } else {
+            alert("Datos obtenidos no correctos")
+        }
+    }
+
+    function eliminarAlquiler(nro) {
+        data.nro = nro;
+        console.log("confirmar", nro);
+    }
+
+    function confirmarEliminacion() {
+        if (data.nro === undefined || data.nro === 0) {
+            alert("no puedo eliminar este nro");
+        } else {
+            axios.delete('/registrar_alquiler/eliminar/' + data.nro).then(function (response) {
+                window.location.reload();
+            }).catch(function (error) {
+                alert("Hubo un error al eliminar la nota");
+            });
+        }
+    }
+</script>

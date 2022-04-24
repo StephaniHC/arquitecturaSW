@@ -1,0 +1,28 @@
+<div class="card mx-auto col-lg-6 bg-dark mb-3 text-light">
+    <div class="card-header">
+        Modificar Genero
+    </div>
+    <form action="/registrar_genero/modificar/{{nro}}?_method=PUT" method="post">
+        <input type="hidden" name="_method" value="PUT">
+        <div class="card-body">
+            <h5 class="card-title">Nro: {{nro}}</h5>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+                </div>
+                <input type="text" class="form-control" name="nombre" value="{{nombre}}"
+                    aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-outline-success">Guardar Cambios</button>
+                </div>
+                <div class="col-md-6">
+                    <a href="/registrar_genero" type="button" class="btn btn-outline-danger">Cancelar Cambios</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
